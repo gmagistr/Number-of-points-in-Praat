@@ -1,0 +1,16 @@
+library(rPraat) #package for Praat
+library(writexl) #package for saving the final table
+
+tab <- data.frame(file = listFiles) #I create the final table
+tab$NO_PTs <- NA
+inputFolder <- "experiment1/data" #Insert here folder's name, pay attention to the orientation of slash, it must be as in the example
+listFiles <- list.files(path = inputFolder, pattern = "\\.TextGrid$" , ignore.case = TRUE)
+for (I in seq_along(listFiles)) {
+ file <- listFiles[I]
+ fileName <- substr(file, 1, nchar(file) - nchar(".TextGrid"))
+ fileTextGrid <- paste0(inputFolder, "/", fileName, ".TextGrid")
+tg <- tg.read(fileTextGrid)
+tab$NO_PTs[I] <-tg.getNumberOfPoints(tg, "points")
+print (tab)
+}
+write_xlsx(tab, "table.xlsx") #write the tab
